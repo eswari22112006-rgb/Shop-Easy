@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ShopEasy - Online Shopping</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #2874f0;
+            color: white;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .search {
+            flex: 1;
+            display: flex;
+        }
+
+        .search input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            outline: none;
+        }
+
+        .search button {
+            padding: 12px 20px;
+            border: none;
+            background: #ff9f00;
+            color: white;
+            cursor: pointer;
+        }
+
+        .nav button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .hero {
+            margin: 20px 5%;
+            padding: 45px;
+            border-radius: 15px;
+            color: white;
+            background: linear-gradient(120deg, #2874f0, #6c5ce7);
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .hero button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background: #ff9f00;
+            color: white;
+            cursor: pointer;
+        }
+
+        .categories,
+        .products-section {
+            padding: 20px 5%;
+        }
+
+        .category-list {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .category {
+            padding: 12px 20px;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #ddd;
+        }
+
+        .category:hover {
+            background: #2874f0;
+            color: white;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(210px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #ddd;
+        }
+
+        .product img {
+            width: 100%;
+            height: 190px;
+            object-fit: contain;
+        }
+
+        .product h3 {
+            margin: 10px 0;
+        }
+
+        .price {
+            color: green;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .old {
+            color: gray;
+            text-decoration: line-through;
+            font-size: 14px;
+        }
+
+        .rating {
+            color: #f39c12;
+            margin: 8px 0;
+        }
+
+        .product button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            background: #2874f0;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .cart {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background: #ff9f00;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: 30px;
+            background: #172337;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        @media(max-width:700px) {
+            header {
+                flex-wrap: wrap;
+            }
+
+            .search {
+                order: 3;
+                flex-basis: 100%;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">🛍️ ShopEasy</div>
+
+    <div class="search">
+        <input
+            id="search"
+            type="text"
+            placeholder="Search products..."
+            onkeyup="searchProducts()"
+        >
+        <button>🔍</button>
+    </div>
+
+    <div class="nav">
+        <button onclick="login()">👤 Login</button>
+        <button onclick="showCart()">
+            🛒 Cart (<span id="cartCount">0</span>)
+        </button>
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <h1>Big Shopping Festival 🎉</h1>
+
+    <p>
+        Welcome to ShopEasy – Everything you need in one place!
+    </p>
+
+    <button onclick="scrollToProducts()">
+        Shop Now
+    </button>
+
+</section>
+
+
+<section class="categories">
+
+    <h2>Shop By Category</h2>
+
+    <div class="category-list">
+
+        <div class="category"
+             onclick="filterProducts('All')">
+            🏠 All
+        </div>
+
+        <div class="category"
+             onclick="filterProducts('Electronics')">
+            📱 Electronics
+        </div>
+
+        <div class="category"
+             onclick="filterProducts('Fashion')">
+            👕 Fashion
+        </div>
+
+        <div class="category"
+             onclick="filterProducts('Beauty')">
+            💄 Beauty
+        </div>
+
+        <div class="category"
+             onclick="filterProducts('Home')">
+            🏠 Home
+        </div>
+
+        <div class="category"
+             onclick="filterProducts('Sports')">
+            ⚽ Sports
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="products-section" id="productsSection">
+
+    <h2>Featured Products</h2>
+
+    <div class="products" id="products"></div>
+
+</section>
+
+
+<button class="cart" onclick="showCart()">
+    🛒 View Cart
+</button>
+
+
+<footer>
+
+    <h3>🛍️ ShopEasy</h3>
+
+    <br>
+
+    <p>Online Shopping Mini Project</p>
+
+    <p>HTML • CSS • JavaScript</p>
+
+    <br>
+
+    <p>© 2026 ShopEasy</p>
+
+</footer>
+
+
+<script>
+
+const products = [
+
+    {
+        name: "Smartphone Pro",
+        category: "Electronics",
+        price: 15999,
+        old: 19999,
+        rating: "⭐⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500"
+    },
+
+    {
+        name: "Wireless Headphones",
+        category: "Electronics",
+        price: 1999,
+        old: 2999,
+        rating: "⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500"
+    },
+
+    {
+        name: "Men's Casual Shirt",
+        category: "Fashion",
+        price: 799,
+        old: 1299,
+        rating: "⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500"
+    },
+
+    {
+        name: "Women's Handbag",
+        category: "Fashion",
+        price: 1299,
+        old: 1999,
+        rating: "⭐⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500"
+    },
+
+    {
+        name: "Face Care Kit",
+        category: "Beauty",
+        price: 699,
+        old: 999,
+        rating: "⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=500"
+    },
+
+    {
+        name: "Running Shoes",
+        category: "Sports",
+        price: 1799,
+        old: 2499,
+        rating: "⭐⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+    },
+
+    {
+        name: "Modern Table Lamp",
+        category: "Home",
+        price: 899,
+        old: 1399,
+        rating: "⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500"
+    },
+
+    {
+        name: "Smart Watch",
+        category: "Electronics",
+        price: 2499,
+        old: 3999,
+        rating: "⭐⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"
+    },
+
+    {
+        name: "Sports Backpack",
+        category: "Sports",
+        price: 999,
+        old: 1499,
+        rating: "⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500"
+    },
+
+    {
+        name: "Sunglasses",
+        category: "Fashion",
+        price: 599,
+        old: 899,
+        rating: "⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500"
+    },
+
+    {
+        name: "Bluetooth Speaker",
+        category: "Electronics",
+        price: 1299,
+        old: 1999,
+        rating: "⭐⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500"
+    },
+
+    {
+        name: "Indoor Plant",
+        category: "Home",
+        price: 399,
+        old: 599,
+        rating: "⭐⭐⭐⭐",
+        image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=500"
+    }
+
+];
+
+
+let cart = [];
+
+
+function displayProducts(list) {
+
+    const container =
+        document.getElementById("products");
+
+    container.innerHTML = "";
+
+    list.forEach((product, index) => {
+
+        container.innerHTML += `
+
+        <div class="product">
+
+            <img src="${product.image}">
+
+            <h3>${product.name}</h3>
+
+            <p>${product.category}</p>
+
+            <div class="rating">
+                ${product.rating}
+            </div>
+
+            <p class="price">
+                ₹${product.price}
+                <span class="old">
+                    ₹${product.old}
+                </span>
+            </p>
+
+            <button onclick="addToCart(${index})">
+                🛒 Add To Cart
+            </button>
+
+            <button onclick="buyNow(${index})">
+                ⚡ Buy Now
+            </button>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
+function addToCart(index) {
+
+    cart.push(products[index]);
+
+    document.getElementById("cartCount")
+        .innerText = cart.length;
+
+    alert(
+        products[index].name +
+        " added to cart!"
+    );
+
+}
+
+
+function showCart() {
+
+    if(cart.length === 0) {
+
+        alert("Your cart is empty!");
+
+        return;
+
+    }
+
+    let total = 0;
+
+    let message =
+        "🛒 SHOP EASY CART\n\n";
+
+    cart.forEach((item, index) => {
+
+        message +=
+            (index + 1) +
+            ". " +
+            item.name +
+            " - ₹" +
+            item.price +
+            "\n";
+
+        total += item.price;
+
+    });
+
+    message +=
+        "\nTotal: ₹" + total;
+
+    alert(message);
+
+}
+
+
+function buyNow(index) {
+
+    alert(
+        "Thank you for choosing ShopEasy!\n\n" +
+        products[index].name +
+        "\nPrice: ₹" +
+        products[index].price +
+        "\n\nOrder process started."
+    );
+
+}
+
+
+function searchProducts() {
+
+    const keyword =
+        document
+        .getElementById("search")
+        .value
+        .toLowerCase();
+
+    const result =
+        products.filter(product =>
+
+            product.name
+                .toLowerCase()
+                .includes(keyword)
+
+            ||
+
+            product.category
+                .toLowerCase()
+                .includes(keyword)
+
+        );
+
+    displayProducts(result);
+
+}
+
+
+function filterProducts(category) {
+
+    if(category === "All") {
+
+        displayProducts(products);
+
+        return;
+
+    }
+
+    const result =
+        products.filter(
+            product =>
+            product.category === category
+        );
+
+    displayProducts(result);
+
+}
+
+
+function scrollToProducts() {
+
+    document
+        .getElementById("productsSection")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+
+function login() {
+
+    const email =
+        prompt("Enter your email:");
+
+    if(email) {
+
+        alert(
+            "Welcome to ShopEasy! 👋\n\n" +
+            "Logged in as: " +
+            email
+        );
+
+    }
+
+}
+
+
+displayProducts(products);
+
+</script>
+
+</body>
+</html>
